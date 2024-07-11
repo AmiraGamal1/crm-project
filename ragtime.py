@@ -1,0 +1,1 @@
+"""This is where you'll make an instance of your Flask application. It'll also contain a few helper functions that define tasks to manage the application"""
