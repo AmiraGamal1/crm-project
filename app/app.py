@@ -17,7 +17,7 @@ class Sale(db.Model):
     date = db.Column(db.DateTime, default=datetime.now(pytz.UTC))
 
     def __repr__(self):
-        return '<product name %r>' % self.id
+        return '<product id %r product name %r>' % self.id %self.product_name
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -34,9 +34,9 @@ def index():
             db.session.commit()
             return redirect('/')
         except:
-            return 'db error'
+            return 'There was an issue adding your sale information'
     else:
-        sales = Sale.query.order_by(Sale.date).all()
+        sales = Sale.query.order_by(Sale.date).first()
         return render_template('index.html', sales=sales)
     
 @app.route('/delete/<int:id>')
