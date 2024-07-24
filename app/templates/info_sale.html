@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    {% block navbar %}
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_user'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    {% endblock %}
+    <div class="info_sale">
+        <table>
+            <tr>
+                <th>Product</th>
+                <td>{{ sale.product_name }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ sale.product_quantity }}</td>
+            </tr>
+            <tr>
+                <th>Customer name</th>
+                <td>{{ sale.customer_name }}</td>
+            </tr>
+            <tr>
+                <th>Customer email</th>
+                <td>{{ sale.customer_email }}</td>
+            </tr>
+            <tr>
+                <th>Customer phone</th>
+                <td>{{ sale.customer_phone }}</td>
+            </tr>
+            <tr>
+                <th>User</th>
+                <td>{{ sale.user_name }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ sale.date.date() }}</td>
+            </tr>
+        </table>
+    <div>
+        <a href="/delete_sale/{{sale.id}}">Delete</a>
+        <br>
+        <a href="/update_sale/{{sale.id}}">Update</a>
+    </div>
+</div>
+{% endblock %}

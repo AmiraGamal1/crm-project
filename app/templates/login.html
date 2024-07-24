@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+<div class="login">
+    <div class="form-box">
+        <h1>Login</h1>
+            <form action="" method="post">
+                <div class="input-group">
+                    <div class="input-filed">
+                        <input type="email" name="email" id="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-filed">
+                        <input type="password" name="password" id="password" placeholder="Password" required>
+                    </div>
+                        <div class="input-filed">
+                            <input type="submit" name="Login" value="Login">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+{% endblock %}

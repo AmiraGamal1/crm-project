@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    {% block navbar %}
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_user'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    {% endblock %}
+    <div class='search'>
+        <form action="{{ url_for('search_sale', search='') }}" method="get">
+            <input type='text' placeholder='Search' name='search' id='search'>
+            <input type='submit' value="Search">
+        </form>
+    </div>
+    <!--navigation through the records-->
+    <div class="search_sale">
+        <h1 style="text-align: center;">Sales information</h1>
+        {% if sales|length < 1 %}
+        <h4  style="text-align: center;"> No search results</h4>
+        {% else %}
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Customer name</th>
+                <th>Customer email</th>
+                <th>Customer phone</th>
+                <th>User</th>
+                <th>Date</th>
+                <th>Id</th>
+            </tr>
+            {% for sale in sales %}
+                <tr>
+                    <td>{{ sale.product_name }}</td>
+                    <td>{{ sale.product_quantity }}</td>
+                    <td>{{ sale.customer_name }}</td>
+                    <td>{{ sale.customer_email }}</td>
+                    <td>{{ sale.customer_phone }}</td>
+                    <td>{{ sale.user_name }}</td>
+                    <td>{{ sale.date.date() }}</td>
+                    <td><a href="/info_sale/{{ sale.id }}">{{ sale.id }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

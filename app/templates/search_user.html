@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    {% block navbar %}
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_user'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    {% endblock %}
+    <div class='search'>
+        <form action="{{ url_for('search_user', search='') }}" method="get">
+            <input type='text' placeholder='Search' name='search' id='search'>
+            <input type='submit' value="Search">
+        </form>
+    </div>
+    <!--navigation through the records-->
+    <div class="view_user">
+        <h1 style="text-align: center;">Users information</h1>
+        {% if users|length < 1 %}
+        <h4  style="text-align: center;"> Not found </h4>
+        {% else %}
+        <table>
+            <tr>
+                <th>User name</th>
+                <th>User email</th>
+                <th>User phone</th>
+                <th>Password</th>
+                <th>Privilage</th>
+                <th>date</th>
+                <th>Id</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.user_name }}</td>
+                    <td>{{ user.user_email }}</td>
+                    <td>{{ user.user_phone }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.type }}</td>
+                    <td>{{ user.date.date() }}</td>
+                    <td><a href="/info_user/{{ user.id }}">{{ user.id }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

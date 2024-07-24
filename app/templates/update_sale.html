@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    {% block navbar %}
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_user'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    {% endblock %}
+    <h1  style="text-align: center;">Update sale information</h1>
+    <div class="form">
+        <form action="/update_sale/{{sale.id}}" method="post">
+            <label>Product</label>
+            <input type="text" name="product" id="product" value="{{sale.product_name}}" required>
+            <br/><label>Quantity</label>
+            <input type="number" name="quantity" id="quantity" value="{{sale.product_quantity}}" required>
+            <br/><label>Customer</label>
+            <input type="text" name="customer" id="customer" value="{{sale.customer_name}}" required>
+            <br/><label>Customer email</label>
+            <input type="email" name="customer_email" id="customer" value="{{sale.customer_email}}" required>
+            <br/><label>Customer phone</label>
+            <input type="tel" name="customer_phone" value="sale.customer_phone" id="customer">
+            <br/><label>user</label>
+            <input type="text" name="user" id="user" value="sale.user" required>
+            <br/>
+            <input type="submit" value="Update" name="update" id="update">
+        </form>
+    </div>
+{% endblock %}

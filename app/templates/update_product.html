@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    {% block navbar %}
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_user'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    {% endblock %}
+    <h1  style="text-align: center;">Update product information</h1>
+    <div class="form">
+        <form action="/update_product/{{product.id}}" method="post">
+            <label>Product</label>
+            <input type="text" name="product" id="product" value="{{ product.product_name }}" required>
+            <label>Price</label>
+            <input type="text" name="price" id="price" value="{{ product.price }}" required>
+            <br/><label>Quantity</label>
+            <input type="number" name="quantity" id="quantity" value="{{ product.product_quantity }}" required>
+            <input type="submit" value="Update" name="update" id="update">
+        </form>
+    </div>
+{% endblock %}

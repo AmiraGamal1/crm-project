@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    {% block navbar %}
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_user'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    {% endblock %}
+    <div class='search'>
+        <form action="{{ url_for('search_customer', search='') }}" method="get">
+            <input type='text' placeholder='Search' name='search' id='search'>
+            <input type='submit' value="Search">
+        </form>
+    </div>
+    <!--navigation through the records-->
+    <div class="view_customer">
+        <h1 style="text-align: center;">Customers information</h1>
+        {% if customers|length < 1 %}
+        <h4  style="text-align: center;"> There are no customers yet !</h4>
+        {% else %}
+        <table>
+            <tr>
+                <th>Customer name</th>
+                <th>Customer email</th>
+                <th>Customer phone</th>
+                <th>frequentcy pay</th>
+                <th>date</th>
+                <th>Id</th>
+            </tr>
+            {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.customer_name }}</td>
+                    <td>{{ customer.customer_email }}</td>
+                    <td>{{ customer.customer_phone }}</td>
+                    <td>{{ customer.frequentcy_pay }}</td>
+                    <td>{{ customer.date.date() }}</td>
+                    <td>{{ customer.id }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

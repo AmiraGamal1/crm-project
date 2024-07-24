@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_user'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    <div class="new-sale">
+        <form action="/add_sale" method="post">
+            <label>Product</label>
+            <br/>
+            <input type="text" name="product" id="product" required>
+            <br/><label>Quantity</label><br/>
+            <input type="number" name="quantity" id="quantity"  required>
+            <br/><label>Customer</label><br/>
+            <input type="text" name="customer" id="customer" required>
+            <br/><label>Customer email</label><br/>
+            <input type="email" name="customer_email" id="customer_email" required>
+            <br/><label>Customer phone</label><br/>
+            <input type="tel" name="customer_phone" id="customer_phone">
+            <br/><label>user</label><br/>
+            <input type="text" name="user" id="user" required>
+            <br/>
+            <input type="submit" value="Add" name="add" id="add">
+        </form>
+    </div>
+</div>
+{% endblock %}

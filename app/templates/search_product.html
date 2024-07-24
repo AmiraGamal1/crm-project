@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>CRM</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    {% block navbar %}
+    <div class='topnav'>
+        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_product'>Products</a>
+        <a href='/view_customer'>Customers</a>
+        <a href='/view_users'>Users</a>
+        <a class='logout' href='/logout'>Logout</a>
+    </div>
+    {% endblock %}
+    <div class='search'>
+        <form action="{{ url_for('search_product', search='') }}" method="get">
+            <input type='text' placeholder='Search' name='search' id='search'>
+            <input type='submit' value="Search">
+        </form>
+    </div>
+    <!--navigation through the records-->
+    <div class="view_product">
+        <h1 style="text-align: center;">Products information</h1>
+        {% if products|length < 1 %}
+        <h4  style="text-align: center;"> There are no product on the store, create one below!</h4>
+        {% else %}
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Date</th>
+                <th>Id</th>
+            </tr>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.product_quantity }}</td>
+                    <td>{{ product.date.date() }}</td>
+                    <td><a href="/info_product/{{ product.id }}">{{ product.id }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
