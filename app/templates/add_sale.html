@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block body %}
+
 <div class="content">
+    {% block navbar %}
     <div class='topnav'>
         <a class='active' href='/view_sale'>Sales</a>
         <a href='/view_product'>Products</a>
@@ -13,24 +15,52 @@
         <a href='/view_user'>Users</a>
         <a class='logout' href='/logout'>Logout</a>
     </div>
-    <div class="new-sale">
-        <form action="/add_sale" method="post">
-            <label>Product</label>
-            <br/>
-            <input type="text" name="product" id="product" required>
-            <br/><label>Quantity</label><br/>
-            <input type="number" name="quantity" id="quantity"  required>
-            <br/><label>Customer</label><br/>
-            <input type="text" name="customer" id="customer" required>
-            <br/><label>Customer email</label><br/>
-            <input type="email" name="customer_email" id="customer_email" required>
-            <br/><label>Customer phone</label><br/>
-            <input type="tel" name="customer_phone" id="customer_phone">
-            <br/><label>user</label><br/>
-            <input type="text" name="user" id="user" required>
-            <br/>
-            <input type="submit" value="Add" name="add" id="add">
-        </form>
+    {% endblock %}
+    <div class="add_update">
+        <div class="form-box">
+            <h1>Add new Sale</h1>
+            <form action="/add_sale" method="post">
+                <div class="input-group">
+                    <label>Product</label>
+                    <div class="input-field">
+                        <input type="text" name="product" id="product" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Quantity</label>
+                    <div class="input-field">
+                        <input type="number" name="quantity" id="quantity" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Customer</label>
+                    <div class="input-field">
+                        <input type="text" name="customer" id="customer" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Customer email</label>
+                    <div class="input-field">
+                        <input type="email" name="customer_email" id="customer_email" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Customer phone</label>
+                    <div class="input-field">
+                        <input type="tel" name="customer_phone" id="customer_phone">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>User</label>
+                    <div class="input-field">
+                        <input type="text" name="user" id="user" required>
+                    </div>
+                </div>
+                <div class="input-filed">
+                    <input type="submit" value="Add" name="add" id="add">
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

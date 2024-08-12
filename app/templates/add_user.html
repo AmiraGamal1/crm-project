@@ -13,25 +13,49 @@
         <a href='/view_user'>Users</a>
         <a class='logout' href='/logout'>Logout</a>
     </div>
-    <div class="new-sale">
-        <form action="/add_user" method="post">
-            <label>User name</label><br/>
-            <input type="text" name="user" id="user" required>
-            <br/><label>User email</label><br/>
-            <input type="email" name="user_email" id="user_email"  required>
-            <br/><label>User phone</label><br/>
-            <input type="tel" name="user_phone" id="user_phone">
-            <br/><label>Password</label><br/>
-            <input type="password" name="user_password" id="user_password" required>
-            <br/>
-            <label for="userPrivilege">Select User Privilege</label>
-            <select id="privilege" name="privilege">
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="supervisor">Supervisor</option>
-            </select>
-            <input type="submit" value="Add" name="add" id="add">
-        </form>
+    <div class="add_update">
+        <div class="form-box">
+            <h1>Add new User</h1>
+            <form action="/add_user" method="post">
+                <div class="input-group">
+                    <label>User name</label>
+                    <div class="input-field">
+                        <input type="text" name="user" id="user" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>User email</label>
+                    <div class="input-field">
+                        <input type="email" name="user_email" id="user_email"  required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>User phone</label>
+                    <div class="input-field">
+                        <input type="tel" name="user_phone" id="user_phone">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-field">
+                        <input type="password" name="user_password" id="user_password" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="userPrivilege">Select User Privilege</label>
+                    <div class="input-field">
+                        <select id="privilege" name="privilege">
+                            <option value="admin">Admin</option>
+                            <option value="editor">Editor</option>
+                            <option value="supervisor">Supervisor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-filed">
+                    <input type="submit" value="Add" name="add" id="add">
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

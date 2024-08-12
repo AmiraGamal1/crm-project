@@ -13,19 +13,33 @@
         <a href='/view_user'>Users</a>
         <a class='logout' href='/logout'>Logout</a>
     </div>
-    <div class="new-product">
-        <form action="/add_product" method="post">
-            <label>Product</label>
-            <br/>
-            <input type="text" name="product" id="product" required>
-            <label>Price</label>
-            <br/>
-            <input type="text" name="price" id="price" required>
-            <label>Quantity</label><br/>
-            <input type="number" name="quantity" id="quantity" required>
-            <br/>
-            <input type="submit" value="Add" name="add" id="add">
-        </form>
+    <div class="add_update">
+        <div class="form-box">
+            <h1>Add new Product</h1>
+            <form action="/add_product" method="post">
+                <div class="input-group">
+                    <label>Product</label>
+                    <div class="input-field">
+                        <input type="text" name="product" id="product" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Price</label>
+                    <div class="input-field">
+                        <input type="text" name="price" id="price" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Quantity</label>
+                    <div class="input-field">
+                        <input type="number" name="quantity" id="quantity" required>
+                    </div>
+                </div>
+                <div class="input-filed">
+                    <input type="submit" value="Add" name="add" id="add">
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

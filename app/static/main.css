@@ -1,29 +1,82 @@
-body, html {
-    margin: 0;
-    font-family: sans-serif;
-    background-color: white;
-}
-.content {
-    margin: 0 auto;
-    width: 400px;
+.login {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f2f2f2;
 }
 
-table, td, th {
+.form-box {
+    width: 400px;
+    height: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-box h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-filed {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input-filed input[type="email"], .input-filed input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-filed input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #04AA6D;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.input-filed input[type="submit"]:hover {
+    background-color: #3e8e41;
+}
+
+.view table, td, th {
     border: 1px solid #aaa;
 }
 
-table {
+.view table {
     border-collapse: collapse;
     width: 100%;
 }
 
-th {
+.view th {
     height: 30px;
 }
 
-td {
+.view td {
     text-align: center;
     padding: 5px;
+}
+
+.view tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.view tr:nth-child(odd) {
+    background-color: #ffffff;
 }
 
 .form {
@@ -31,5 +84,224 @@ td {
 }
 
 #content {
-    width: 70%;
+    width: 100%;
+}
+
+.topnav {
+    width: 100%; /* make the nav bar full width */
+    background-color: #333; /* dark gray background */
+    padding: 0px; 
+    display: flex; /* use flexbox to layout the links */
+    justify-content: space-between; /* space out the links */
+    align-items: center; /* center the links vertically */
+  }
+  
+  .topnav a {
+    color: #fff; /* white text color */
+    text-decoration: none; /* remove underline */
+    padding: 10px; /* add some padding to the links */
+    font-size: 17px;
+  }
+  
+  .topnav a.logout {
+    margin-left: auto; /* push the logout link to the right */
+  }
+  
+  .topnav a:hover {
+    background-color: #555; /* darker gray background on hover */
+    color: #fff; /* white text color */
+  }
+  .topnav a.active {
+    background-color: #04AA6D; /* Change this to your desired color */
+    color: white;
+  }
+
+  .search {
+    text-align: center;
+    padding-top: 20px; /* adjust the padding value as needed */
+  }
+  
+  .search form {
+    display: inline-block;
+    margin: 0 auto;
+  }
+  
+  .search input[type="text"] {
+    width: 60%; 
+    height: 10px;
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid #ccc;
+  }
+  
+  .search input[type="submit"] {
+    width: 100px; /* adjust the width value as needed */
+    height: 30px;
+    padding:  4px 8px;;
+    font-size: 17px;
+    background-color: #04AA6D;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+    
+  .search input[type="submit"]:hover {
+    background-color: #3e8e41;
+  }
+
+  .add {
+    text-align: right;
+    padding-top: 20px; /* adjust the padding value as needed */
+  }
+  
+  .add a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 10px;
+    background-color: #04AA6D;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add a:hover {
+    background-color: #3e8e41;
+  }
+
+  .add_update {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+  }
+
+  .add_update .form-box {
+    width: 400px;
+    height: 380px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .add_update .form-box h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .add_update .input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .add_update .input-group label {
+    width: 100px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+
+  .add_update .input-field {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+.add_update .input-field input[type="text"], 
+.add_update .input-field input[type="email"], 
+.add_update .input-field input[type="tel"], 
+.add_update .input-field input[type="number"],
+.add_update .input-field input[type="password"],
+#privilege {
+  width: 220px; 
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add_update #add {
+  background-color: #04AA6D;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.info {
+  width: 400px;
+  height: 380px;
+  margin: 20px auto; /* Center horizontally */
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.table_box {
+  width: 100%;
+}
+
+.table_box table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table_box th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+.table_box th {
+  font-weight: bold;
+}
+
+.table_box td {
+  border-bottom: 1px solid #ccc;
+  padding-top: 5px;
+}
+
+#update {
+  font-size: 16px;
+  display: block;
+  color: #fff;
+  background-color: #04AA6D;
+  text-align: center;
+  padding: 10px 0; 
+  border: none;
+  text-decoration: none;
+  margin-top: 20px;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+#delete {
+  font-size: 16px;
+  display: block;
+  color: #fff;
+  background-color: #04AA6D;
+  text-align: center;
+  padding: 10px 0; 
+  border: none;
+  text-decoration: none;
+  margin-top: 0;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease;
 }

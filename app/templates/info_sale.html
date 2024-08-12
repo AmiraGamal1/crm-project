@@ -15,41 +15,45 @@
         <a class='logout' href='/logout'>Logout</a>
     </div>
     {% endblock %}
-    <div class="info_sale">
-        <table>
-            <tr>
-                <th>Product</th>
-                <td>{{ sale.product_name }}</td>
-            </tr>
-            <tr>
-                <th>Quantity</th>
-                <td>{{ sale.product_quantity }}</td>
-            </tr>
-            <tr>
-                <th>Customer name</th>
-                <td>{{ sale.customer_name }}</td>
-            </tr>
-            <tr>
-                <th>Customer email</th>
-                <td>{{ sale.customer_email }}</td>
-            </tr>
-            <tr>
-                <th>Customer phone</th>
-                <td>{{ sale.customer_phone }}</td>
-            </tr>
-            <tr>
-                <th>User</th>
-                <td>{{ sale.user_name }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ sale.date.date() }}</td>
-            </tr>
-        </table>
-    <div>
-        <a href="/delete_sale/{{sale.id}}">Delete</a>
-        <br>
-        <a href="/update_sale/{{sale.id}}">Update</a>
+    <div class="info">
+        <div class="table_box">
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <td>{{ sale.product_name }}</td>
+                </tr>
+                <tr>
+                    <th>Quantity</th>
+                    <td>{{ sale.product_quantity }}</td>
+                </tr>
+                <tr>
+                    <th>Customer name</th>
+                    <td>{{ sale.customer_name }}</td>
+                </tr>
+                <tr>
+                    <th>Customer email</th>
+                    <td>{{ sale.customer_email }}</td>
+                </tr>
+                <tr>
+                    <th>Customer phone</th>
+                    <td>{{ sale.customer_phone }}</td>
+                </tr>
+                <tr>
+                    <th>User</th>
+                    <td>{{ sale.user_name }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ sale.date.date() }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="edit">
+            <a href="/update_sale/{{sale.id}}" id="update">Update</a>
+            <br>
+            <a href="/delete_sale/{{sale.id}}" id="delete">Delete</a>
+        </div>
     </div>
+    
 </div>
 {% endblock %}

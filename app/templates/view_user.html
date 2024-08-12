@@ -22,7 +22,7 @@
         </form>
     </div>
     <!--navigation through the records-->
-    <div class="view_user">
+    <div class="view">
         <h1 style="text-align: center;">Users information</h1>
         {% if users|length < 1 %}
         <h4  style="text-align: center;"> There are no users, create one below!</h4>
@@ -32,7 +32,6 @@
                 <th>User name</th>
                 <th>User email</th>
                 <th>User phone</th>
-                <th>Password</th>
                 <th>Privilage</th>
                 <th>date</th>
                 <th>Id</th>
@@ -42,7 +41,6 @@
                     <td>{{ user.user_name }}</td>
                     <td>{{ user.user_email }}</td>
                     <td>{{ user.user_phone }}</td>
-                    <td>{{ user.password }}</td>
                     <td>{{ user.type }}</td>
                     <td>{{ user.date.date() }}</td>
                     <td><a href="/info_user/{{ user.id }}">{{ user.id }}</a></td>
@@ -51,7 +49,7 @@
         </table>
         {% endif %}
     </div>
-    <div class="add_user">
+    <div class="add">
         <a href="/add_user">Add user</a>
     </div>
 </div>

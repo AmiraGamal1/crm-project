@@ -16,16 +16,33 @@
         <a class='logout' href='/logout'>Logout</a>
     </div>
     {% endblock %}
-    <h1  style="text-align: center;">Update product information</h1>
-    <div class="form">
-        <form action="/update_product/{{product.id}}" method="post">
-            <label>Product</label>
-            <input type="text" name="product" id="product" value="{{ product.product_name }}" required>
-            <label>Price</label>
-            <input type="text" name="price" id="price" value="{{ product.price }}" required>
-            <br/><label>Quantity</label>
-            <input type="number" name="quantity" id="quantity" value="{{ product.product_quantity }}" required>
-            <input type="submit" value="Update" name="update" id="update">
-        </form>
+    <div class="add_update">
+        <div class="form-box">
+            <h1  style="text-align: center;">Update product information</h1>
+            <form action="/update_product/{{product.id}}" method="post">
+                <div class="input-group">
+                    <label>Product</label>
+                    <div class="input-field">
+                        <input type="text" name="product" id="product" value="{{ product.product_name }}" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Price</label>
+                    <div class="input-field">
+                        <input type="text" name="price" id="price" value="{{ product.price }}" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Quantity</label>
+                    <div class="input-field">
+                        <input type="number" name="quantity" id="quantity" value="{{ product.product_quantity }}" required>
+                    </div>
+                </div>
+                <div class="input-field">
+                    <input type="submit" value="Update" name="update" id="update">
+                </div> 
+            </form>
+        </div>
     </div>
+</div>
 {% endblock %}

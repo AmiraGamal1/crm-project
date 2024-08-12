@@ -16,25 +16,49 @@
         <a class='logout' href='/logout'>Logout</a>
     </div>
     {% endblock %}
-    <h1  style="text-align: center;">Update user information</h1>
-    <div class="form">
-        <form action="/update_user/{{user.id}}" method="post">
-            <label>User name</label>
-            <input type="text" name="user" id="user" value="{{ user.user_name }}" required>
-            <br/><label>User email</label>
-            <input type="email" name="user_email" id="user_email" value="{{ user.user_email }}" required>
-            <br/><label>User phone</label>
-            <input type="tel" name="user_phone" id="user_phone" value="{{ user.user_phone }}">
-            <br/><label>Password</label>
-            <input type="password" name="user_password" id="user_password" value="{{ user.user_password }}" required>
-            <br/>
-            <label for="userPrivilege">Select User Privilege</label>
-            <select id="privilege" name="privilege">
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="supervisor">Supervisor</option>
-            </select>
-            <input type="submit" value="Update" name="update" id="update">
-        </form>
+    <div class="add_update">
+        <div class="form-box">
+            <h1  style="text-align: center;">Update user information</h1>
+            <form action="/update_user/{{user.id}}" method="post">
+                <div class="input-group">
+                    <label>User name</label>
+                    <div class="input-field">
+                        <input type="text" name="user" id="user" value="{{ user.user_name }}" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>User email</label>
+                    <div class="input-field">
+                        <input type="email" name="user_email" id="user_email" value="{{ user.user_email }}" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>User phone</label>
+                    <div class="input-field">
+                        <input type="tel" name="user_phone" id="user_phone" value="{{ user.user_phone }}">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-field">
+                        <input type="password" name="user_password" id="user_password"required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="userPrivilege">User Privilege</label>
+                    <div class="input-field">
+                        <select id="privilege" name="privilege">
+                            <option value="admin">Admin</option>
+                            <option value="editor">Editor</option>
+                            <option value="supervisor">Supervisor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-field">
+                    <input type="submit" value="Update" name="update" id="update">
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 {% endblock %}

@@ -15,29 +15,32 @@
         <a class='logout' href='/logout'>Logout</a>
     </div>
     {% endblock %}
-    <div class="info_product">
-        <table>
-            <tr>
-                <th>Product</th>
-                <td>{{ product.product_name }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ product.price }}</td>
-            </tr>
-            <tr>
-                <th>Quantity</th>
-                <td>{{ product.product_quantity }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ product.date.date() }}</td>
-            </tr>
-        </table>
-    <div>
-        <a href="/delete_product/{{product.id}}">Delete</a>
-        <br>
-        <a href="/update_product/{{product.id}}">Update</a>
+    <div class="info">
+        <div class="table_box">
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <td>{{ product.product_name }}</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>{{ product.price }}</td>
+                </tr>
+                <tr>
+                    <th>Quantity</th>
+                    <td>{{ product.product_quantity }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ product.date.date() }}</td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <a href="/update_product/{{product.id}}" id="update">Update</a>
+            <br>
+            <a href="/delete_product/{{product.id}}" id="delete">Delete</a>
+        </div>
     </div>
 </div>
 {% endblock %}

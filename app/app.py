@@ -79,6 +79,9 @@ def add_sale():
     else:
         return render_template('add_sale.html')
     
+
+
+    
 @app.route('/info_sale/<int:id>', methods=['GET'])
 def info_sale(id):
     """view single sale information"""
