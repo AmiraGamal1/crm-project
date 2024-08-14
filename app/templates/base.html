@@ -8,6 +8,8 @@
         {% block head %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

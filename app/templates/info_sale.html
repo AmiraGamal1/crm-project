@@ -51,9 +51,8 @@
         <div class="edit">
             <a href="/update_sale/{{sale.id}}" id="update">Update</a>
             <br>
-            <a href="/delete_sale/{{sale.id}}" id="delete">Delete</a>
+            <a href="{{ url_for('delete_sale', id=sale.id) }}" onclick="return confirm('are you sure you want delete this record?!')" id="delete">Delete</a>
         </div>
     </div>
-    
 </div>
 {% endblock %}

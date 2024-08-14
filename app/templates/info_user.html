@@ -8,10 +8,10 @@
 <div class="content">
     {% block navbar %}
     <div class='topnav'>
-        <a class='active' href='/view_sale'>Sales</a>
+        <a href='/view_sale'>Sales</a>
         <a href='/view_product'>Products</a>
         <a href='/view_customer'>Customers</a>
-        <a href='/view_user'>Users</a>
+        <a class='active' href='/view_user'>Users</a>
         <a class='logout' href='/logout'>Logout</a>
     </div>
     {% endblock %}
@@ -43,7 +43,7 @@
         <div class="edit">
             <a href="/update_user/{{user.id}}" id="update">Update</a>
             <br/>
-            <a href="/delete_user/{{user.id}}" id="delete">Delete</a>
+            <a href="{{ url_for('delete_user', id=user.id) }}" onclick="return confirm('are you sure you want delete this record?!')" id="delete">Delete</a>
         </div>
     </div>
 </div>
