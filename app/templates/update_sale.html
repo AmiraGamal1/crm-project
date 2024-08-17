@@ -22,14 +22,20 @@
             <form action="/update_sale/{{sale.id}}" method="post">
                 <div class="input-group">
                     <label>Product</label>
-                    <div class="input-field">
+                    <div class="input-field {% if error == 'Product not found' %}error-field{% endif %}">
                         <input type="text" name="product" id="product" value="{{ sale.product_name }}" required>
+                        {% if error == 'product not found' %}
+                        <div class="error-mesg">{{ error }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="input-group">
                     <label>Quantity</label>
-                    <div class="input-field">
+                    <div class="input-field {% if error == 'Not enough quantity' %}error-field{% endif %}">
                         <input type="number" name="quantity" id="quantity" value="{{ sale.product_quantity }}" required>
+                        {% if error == 'Not enough quantity' %}
+                        <div class="error-mesg">{{ error }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="input-group">
@@ -55,7 +61,7 @@
                     <div class="input-field">
                         <input type="text" name="user" id="user" value="{{ sale.user_name }}" required>
                     </div>
-                </div>    
+                </div>   
                 <div class="input-field">
                     <input type="submit" value="Update" name="add" id="add">
                 </div> 

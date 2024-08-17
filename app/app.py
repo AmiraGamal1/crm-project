@@ -48,6 +48,7 @@ def search_sale():
 def add_sale():
     """add new sale"""
     if request.method == 'POST':
+        error = ""
         product = request.form['product']
         quantity = request.form['quantity']
         customer = request.form['customer']
@@ -57,7 +58,7 @@ def add_sale():
         prod = Product.query.filter_by(product_name=product).first()
         if prod:
             if prod.product_quantity < int(quantity):
-                return 'Not enough quantity'
+                error = 'Not enough quantity'
             else:
                 prod.product_quantity -= int(quantity)
                 try:
@@ -65,7 +66,14 @@ def add_sale():
                 except:
                     return 'There was an issue updating product quantity'
         else:
-            return 'Product not found'
+            error = 'Product not found'
+        if error:
+            return render_template('add_sale.html', product=product,
+                                   quantity=quantity, customer=customer,
+                                   customer_email=customer_email,
+                             
+                                   customer_phone=customer_phone,
+                                   user=user, error=error)
         new_sale = Sale(product_name=product, product_quantity=quantity,
                         customer_name=customer, customer_email=customer_email,
                         customer_phone=customer_phone, user_name=user)
@@ -105,17 +113,27 @@ def delete_sale(id):
 def update_sale(id):
     sale = Sale.query.get_or_404(id)
     if request.method == 'POST':
-        sale.product_name = request.form['product']
-        sale.product_quantity = request.form['quantity']
+        product = request.form['product']
+        quantity = request.form['quantity']
         sale.customer_name = request.form['customer']
         sale.user_name = request.form['user']
-
-        try:
-            db.session.commit()
-            return redirect('/view_sale')
-        except:
-            return 'db update error'
-        
+        prod = Product.query.filter_by(product_name=product).first()
+        if prod: 
+            if prod.product_quantity < int(quantity):
+                error = 'Not enough quantity'
+            else:
+                prod.product_quantity += sale.product_quantity
+                prod.product_quantity -= int(quantity)
+                sale.product_name = product
+                sale.product_quantity = quantity
+                try:
+                    db.session.commit()
+                    return redirect('/view_sale')
+                except:
+                    return 'db update error'
+        else:
+            error = 'Product not found'
+        return render_template('update_sale.html', sale=sale, error=error)
     else:
         return render_template('update_sale.html', sale=sale)
 

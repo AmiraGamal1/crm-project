@@ -22,38 +22,44 @@
             <form action="/add_sale" method="post">
                 <div class="input-group">
                     <label>Product</label>
-                    <div class="input-field">
-                        <input type="text" name="product" id="product" required>
+                    <div class="input-field {% if error == 'Product not found' %}error-field{% endif %}">
+                        <input type="text" name="product" id="product" value ="{% if product %}{{product}}{% endif %}">
+                        {% if error == 'Product not found' %}
+                        <div class="error-mesg">{{ error }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="input-group">
                     <label>Quantity</label>
-                    <div class="input-field">
-                        <input type="number" name="quantity" id="quantity" required>
+                    <div class="input-field {% if error == 'Not enough quantity' %}error-field{% endif %}">
+                        <input type="number" name="quantity" id="quantity" value ="{% if quantity %}{{quantity}}{% endif %}" required>
+                        {% if error == 'Not enough quantity' %}
+                        <div class="error-mesg">{{ error }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="input-group">
                     <label>Customer</label>
                     <div class="input-field">
-                        <input type="text" name="customer" id="customer" required>
+                        <input type="text" name="customer" id="customer" value="{% if customer %}{{customer}}{% endif %}" required>
                     </div>
                 </div>
                 <div class="input-group">
                     <label>Customer email</label>
                     <div class="input-field">
-                        <input type="email" name="customer_email" id="customer_email" required>
+                        <input type="email" name="customer_email" id="customer_email" value="{% if customer_email %}{{customer_email}}{% endif %}" required>
                     </div>
                 </div>
                 <div class="input-group">
                     <label>Customer phone</label>
                     <div class="input-field">
-                        <input type="tel" name="customer_phone" id="customer_phone">
+                        <input type="tel" name="customer_phone" id="customer_phone" value="{%if customer_phone %}{{customer_phone}}{% endif %}">
                     </div>
                 </div>
                 <div class="input-group">
                     <label>User</label>
                     <div class="input-field">
-                        <input type="text" name="user" id="user" required>
+                        <input type="text" name="user" id="user" value="{% if user %}{{user}}{% endif %}" required>
                     </div>
                 </div>
                 <div class="input-filed">

@@ -209,7 +209,7 @@
     margin-left: 10px;
   }
 
-  .add_update .input-field {
+  .add_update .input-field,  .add_update .error-field {
     flex: 1;
     margin-left: 10px;
   }
@@ -225,6 +225,19 @@
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.add_update .error-field input[type="number"],
+.add_update .error-field input[type="text"] {
+  width: 220px; 
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid red;
+  border-radius: 4px;
+}
+
+.error-mesg {
+  color: red;
 }
 
 .add_update #add {
