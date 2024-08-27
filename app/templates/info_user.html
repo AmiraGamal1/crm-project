@@ -11,7 +11,9 @@
         <a href='/view_sale'>Sales</a>
         <a href='/view_product'>Products</a>
         <a href='/view_customer'>Customers</a>
+        {% if current_user.has_role('admin') or current_user.has_role('supervisor')%}
         <a class='active' href='/view_user'>Users</a>
+        {% endif %}
         <a class='logout' href='/logout'>Logout</a>
     </div>
     {% endblock %}
@@ -32,7 +34,7 @@
                 </tr>
                 <tr>
                     <th>Privilage</th>
-                    <td>{{ user.type }}</td>
+                    <td>{{ user.roles[0].name }}</td>
                 </tr>
                 <tr>
                     <th>Date</th>
@@ -41,9 +43,11 @@
             </table>
         </div>
         <div class="edit">
+            {% if current_user.has_role('admin') or current_user.has_role('editor')%}
             <a href="/update_user/{{user.id}}" id="update">Update</a>
             <br/>
             <a href="{{ url_for('delete_user', id=user.id) }}" onclick="return confirm('are you sure you want delete this record?!')" id="delete">Delete</a>
+            {% endif %}
         </div>
     </div>
 </div>

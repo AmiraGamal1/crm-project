@@ -11,7 +11,9 @@
         <a class='active' href='/view_sale'>Sales</a>
         <a href='/view_product'>Products</a>
         <a href='/view_customer'>Customers</a>
+        {% if current_user.has_role('admin') or current_user.has_role('supervisor')%}
         <a href='/view_user'>Users</a>
+        {% endif %}
         <a class='logout' href='/logout'>Logout</a>
     </div>
     {% endblock %}
@@ -54,7 +56,9 @@
         {% endif %}
     </div>
     <div class="add">
+        {% if current_user.has_role('admin') or current_user.has_role('editor')%}
         <a href="/add_sale">Add Sale</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

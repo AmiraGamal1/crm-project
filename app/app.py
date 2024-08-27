@@ -1,10 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, url_for, request, redirect
 from db import db
-from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
-from flask_login import login_required
+from flask_security import Security, SQLAlchemySessionUserDatastore, roles_accepted
 
 
 ########### config app #################
@@ -21,23 +20,27 @@ login_manager.init_app(app)
 from models.customer import Customer, add_customer, get_customer
 from models.product import Product, get_product
 from models.sale import Sale, get_sales
-from models.user import User, get_user
+from models.user import User, Role, get_user, create_roles
+
 
 with app.app_context():
     db.create_all()
+    create_roles()
 
-        
-
+datastore = SQLAlchemySessionUserDatastore(db.session, User, Role)
+security = Security(app, datastore)
 ########### sale routes ###########
 # Define routes for sales
 
 @app.route('/view_sale', methods=['GET'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def view_sale():
     """view Sale table"""
     sales = Sale.query.order_by(Sale.date.desc()).all()
     return render_template('view_sale.html', sales=sales)
 
 @app.route('/search_sale', methods=['GET', 'POST'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def search_sale():
     search = request.args.get('search', '')
     sales = get_sales(search)
@@ -45,6 +48,7 @@ def search_sale():
 
 
 @app.route('/add_sale', methods=['POST', 'GET'])
+@roles_accepted('admin', 'editor')
 def add_sale():
     """add new sale"""
     if request.method == 'POST':
@@ -71,7 +75,6 @@ def add_sale():
             return render_template('add_sale.html', product=product,
                                    quantity=quantity, customer=customer,
                                    customer_email=customer_email,
-                             
                                    customer_phone=customer_phone,
                                    user=user, error=error)
         new_sale = Sale(product_name=product, product_quantity=quantity,
@@ -87,10 +90,9 @@ def add_sale():
     else:
         return render_template('add_sale.html')
     
-
-
-    
+  
 @app.route('/info_sale/<int:id>', methods=['GET'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def info_sale(id):
     """view single sale information"""
     sale = Sale.query.get_or_404(id)
@@ -98,6 +100,7 @@ def info_sale(id):
 
         
 @app.route('/delete_sale/<int:id>')
+@roles_accepted('admin', 'editor')
 def delete_sale(id):
     """delete single sale"""
     sale_to_delete = Sale.query.get_or_404(id)
@@ -110,6 +113,7 @@ def delete_sale(id):
         return 'delete error'
     
 @app.route('/update_sale/<int:id>', methods=['GET', 'POST'])
+@roles_accepted('admin', 'editor')
 def update_sale(id):
     sale = Sale.query.get_or_404(id)
     if request.method == 'POST':
@@ -142,11 +146,13 @@ def update_sale(id):
 # Define routes for customer
 
 @app.route('/view_customer', methods=['GET'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def view_customer():
     customers = Customer.query.order_by(Customer.date.desc()).all()
     return render_template('view_customer.html', customers=customers)
 
 @app.route('/search_customer', methods=['GET', 'POST'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def search_customer():
     search = request.args.get('search', '')
     customers = get_customer(search)
@@ -154,6 +160,7 @@ def search_customer():
 
 ########## user route ##################
 # Define routes for user
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -169,6 +176,8 @@ def  login():
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user)
         return redirect('/view_sale')
+    else:
+        return "login error"
   return render_template('login.html')
 
 @app.route('/logout')
@@ -178,18 +187,21 @@ def  logout():
     return redirect('/')
 
 @app.route('/view_user', methods=['GET'])
+@roles_accepted('admin', 'supervisor')
 def view_user():
     """view user table"""
     users = User.query.order_by(User.user_name).all()
     return render_template('view_user.html', users=users)
 
 @app.route('/search_user', methods=['GET', 'POST'])
+@roles_accepted('admin','supervisor')
 def search_user():
     search = request.args.get('search', '')
     users = get_user(search)
     return render_template('search_user.html', users=users)
 
 @app.route('/add_user', methods=['POST', 'GET'])
+@roles_accepted('admin')
 def add_user():
     """add user"""
     if request.method == 'POST':
@@ -197,12 +209,13 @@ def add_user():
         user_email = request.form['user_email']
         user_phone = request.form['user_phone']
         password = request.form['user_password']
-        type = request.form['privilege']
+        user_role = request.form['privilege']
         
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        role = Role.query.filter_by(name=user_role).first()
         new_user = User(user_name=user_name, user_email=user_email,
-                        user_phone=user_phone, password=hashed_password,
-                        type=type)
+                        user_phone=user_phone, password=hashed_password)
+        new_user.roles.append(role)
         try:
             db.session.add(new_user)
             db.session.commit()
@@ -213,12 +226,14 @@ def add_user():
         return render_template('add_user.html')
     
 @app.route('/info_user/<int:id>', methods=['GET'])
+@roles_accepted('admin', 'supervisor')
 def info_user(id):
     """info single user information"""
     user = User.query.get_or_404(id)
     return render_template('info_user.html', user=user)
 
 @app.route('/delete_user/<int:id>')
+@roles_accepted('admin')
 def delete_user(id):
     """delete single user"""
     user_to_delete = User.query.get_or_404(id)
@@ -231,6 +246,7 @@ def delete_user(id):
         return 'delete error'
     
 @app.route('/update_user/<int:id>', methods=['GET', 'POST'])
+@roles_accepted('admin')
 def update_user(id):
     user = User.query.get_or_404(id)
     if request.method == 'POST':
@@ -253,18 +269,21 @@ def update_user(id):
 # Define routes for product
 
 @app.route('/view_product', methods=['GET'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def view_product():
     """view product table"""
     products = Product.query.order_by(Product.product_name).all()
     return render_template('view_product.html', products=products)
 
 @app.route('/search_product', methods=['GET', 'POST'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def search_product():
     search = request.args.get('search', '')
     products = get_product(search)
     return render_template('search_product.html', products=products)
 
 @app.route('/add_product', methods=['POST', 'GET'])
+@roles_accepted('admin', 'editor')
 def add_product():
     """add product"""
     if request.method == 'POST':
@@ -286,12 +305,14 @@ def add_product():
         return render_template('add_product.html')
 
 @app.route('/info_product/<int:id>', methods=['GET'])
+@roles_accepted('admin', 'editor', 'supervisor')
 def info_product(id):
     """info single product information"""
     product = Product.query.get_or_404(id)
     return render_template('info_product.html', product=product)
 
 @app.route('/delete_product/<int:id>')
+@roles_accepted('admin', 'editor')
 def delete_product(id):
     """delete single sale"""
     product_to_delete = Product.query.get_or_404(id)
@@ -304,6 +325,7 @@ def delete_product(id):
         return 'delete error'
     
 @app.route('/update_product/<int:id>', methods=['GET', 'POST'])
+@roles_accepted('admin', 'editor')
 def update_product(id):
     product = Product.query.get_or_404(id)
     if request.method == 'POST':
