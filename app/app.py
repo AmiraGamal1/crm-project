@@ -1,15 +1,23 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, send_file, Response, jsonify
 from db import db
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_bcrypt import Bcrypt
 from flask_security import Security, SQLAlchemySessionUserDatastore, roles_accepted
-
+import csv
+import io
+import json
+import os
+from os.path import join, dirname, realpath
+from werkzeug.utils import secure_filename
+from sqlalchemy import create_engine, inspect
 
 ########### config app #################
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'amira' 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sales.db'
+UPLOAD_FOLDER = 'uploads/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db.init_app(app)
 
@@ -21,6 +29,8 @@ from models.customer import Customer, add_customer, get_customer
 from models.product import Product, get_product
 from models.sale import Sale, get_sales
 from models.user import User, Role, get_user, create_roles
+from models.json import export_sale_json
+from models.upload_to_database import allowed_file, handle_json_file, parseCSV
 
 
 with app.app_context():
@@ -141,6 +151,55 @@ def update_sale(id):
     else:
         return render_template('update_sale.html', sale=sale)
 
+@app.route('/download_sales')
+def download_sales():
+    format = request.args.get('format')
+    sales_dict = export_sale_json()
+
+    if format == 'csv':
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow(sales_dict[0].keys())
+        for row in sales_dict:
+            writer.writerow(row.values())
+        output.seek(0)
+        response = Response(output, mimetype='test/csv')
+        response.headers['Content-Disposition'] = 'attachment; filename=sales.csv'
+    elif format == 'json':
+        json_data = json.dumps(sales_dict, indent=4)
+        response = Response(json_data, mimetype='application/json')
+        response.headers['Content-Disposition'] = 'attachment; filename=sales.json'
+    else:
+        return "Invalid format", 400
+    return response
+
+@app.route('/upload', methods=['POST', 'GET'])
+def upload():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+        
+        uploaded_file = request.files['file']
+        if uploaded_file == '':
+            return jsonify({"error": "No selected file"}), 400
+        
+        if uploaded_file and allowed_file(uploaded_file.filename):
+            filename = secure_filename(uploaded_file.filename)
+            extention = filename.rsplit('.', 1)[1].lower()
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            uploaded_file.save(file_path)
+            filename.rsplit('.', 1)[1].lower()
+            if extention == 'json':
+                handle_json_file(file_path)                
+            elif extention == 'csv':
+                inspector = inspect(db.engine)
+                return parseCSV(inspector, file_path)
+            else:
+                pass
+            return redirect('/view_sale')
+        else:
+            return jsonify({"error": "File not allowed"}), 400
+    return render_template('upload.html')
 
 ########## customer routes ###############
 # Define routes for customer

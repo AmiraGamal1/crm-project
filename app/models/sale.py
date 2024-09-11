@@ -5,6 +5,7 @@ import pytz
 
 class Sale(db.Model):
     """Sale table"""
+    __tablename__ = 'sales'
     id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(200), nullable=False)
     product_quantity = db.Column(db.Integer, nullable=False)
@@ -13,6 +14,9 @@ class Sale(db.Model):
     customer_phone = db.Column(db.String(15))
     user_name = db.Column(db.String(200), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(pytz.UTC))
+
+    #def as_dict(self):
+    #    #return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     def __repr__(self):
         return '<sale id %r product name %r>' % self.id % self.product_name

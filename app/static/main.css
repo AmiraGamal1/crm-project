@@ -318,3 +318,52 @@
   width: 100%;
   transition: background-color 0.3s ease;
 }
+
+.download-container {
+  position: relative;
+  display: inline-block;
+}
+
+#downloadBtn {
+  background-color: #04AA6D;
+  color: #fff;
+  padding: 10px 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+#downloadBtn:hover {
+  background-color: #3e8e41;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #3e8e41;
+}
+
+.show {
+  display: block;
+}
+

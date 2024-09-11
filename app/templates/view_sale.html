@@ -55,10 +55,21 @@
         </table>
         {% endif %}
     </div>
-    <div class="add">
-        {% if current_user.has_role('admin') or current_user.has_role('editor')%}
-        <a href="/add_sale">Add Sale</a>
-        {% endif %}
-    </div>
+    <body>
+        <div class="add">
+            {% if current_user.has_role('admin') or current_user.has_role('editor')%}
+            <a href="/add_sale">Add Sale</a>
+            <div class="download-container">
+                <button id="downloadBtn">Download</button>
+                <div id="dropdown" class="dropdown-content">
+                    <a href="#" id="downloadJson">JSON</a>
+                    <a href="#" id="downloadCsv">CSV</a>
+                </div>
+            </div>
+            <script src="static/script.js"></script>
+            <a href="/upload">Upload</a>
+            {% endif %}
+        </div>
+    </body>
 </div>
 {% endblock %}
