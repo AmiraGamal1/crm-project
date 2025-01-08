@@ -62,14 +62,28 @@
             <div class="download-container">
                 <button id="downloadBtn">Download</button>
                 <div id="dropdown" class="dropdown-content">
-                    <a href="#" id="downloadJson">JSON</a>
-                    <a href="#" id="downloadCsv">CSV</a>
+                    <a href="#" class="download-link" data-table="sales" data-format="json">JSON</a>
+                    <a href="#" class="download-link" data-table="sales" data-format="csv">CSV</a>
                 </div>
             </div>
-            <script src="static/script.js"></script>
-            <a href="/upload">Upload</a>
+            <div class="upload-container">
+                <button id="openModalBtn">Upload</button>
+                <div id="uploadModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <form id="uploadForm">
+                            <input type="file" id="fileInput" name="file">
+                            <button type="submit">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
             {% endif %}
+            <div id="popup" class="popup"></div>
         </div>
     </body>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}

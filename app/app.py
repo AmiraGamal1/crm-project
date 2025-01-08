@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template, url_for, request, redirect, send_file, Response, jsonify
+from flask import Flask, render_template, url_for, request, redirect, send_file, Response, jsonify, flash, get_flashed_messages
 from db import db
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_bcrypt import Bcrypt
@@ -14,7 +14,7 @@ from sqlalchemy import create_engine, inspect
 
 ########### config app #################
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'amira' 
+app.config['SECRET_KEY'] = 'amira'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sales.db'
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -29,9 +29,8 @@ from models.customer import Customer, add_customer, get_customer
 from models.product import Product, get_product
 from models.sale import Sale, get_sales
 from models.user import User, Role, get_user, create_roles
-from models.json import export_sale_json
-from models.upload_to_database import allowed_file, handle_json_file, parseCSV
-
+from models.export import export_sale_json, export_product_json, export_customer_json
+from models.upload_to_database import allowed_file, parse_products_json_file, parse_products_csv_file, parse_sales_csv_file, parse_sales_json_file
 
 with app.app_context():
     db.create_all()
@@ -94,13 +93,19 @@ def add_sale():
             db.session.add(new_sale)
             db.session.commit()
             add_customer(new_sale)
-            return redirect('/view_sale')
+            flash('Successfully added new sale information.', 'success')
         except:
-            return 'There was an issue adding your sale information'
+            flash('There was an issue adding your sale information', 'error')
+        return redirect('/view_sale')
     else:
         return render_template('add_sale.html')
-    
-  
+
+@app.route('/get_messages')
+def get_messages():
+    messages = [{'category': category, 'message': message} for category, message in get_flashed_messages(with_categories=True)]
+    return jsonify({'messages': messages})
+
+
 @app.route('/info_sale/<int:id>', methods=['GET'])
 @roles_accepted('admin', 'editor', 'supervisor')
 def info_sale(id):
@@ -108,7 +113,7 @@ def info_sale(id):
     sale = Sale.query.get_or_404(id)
     return render_template('info_sale.html', sale=sale)
 
-        
+
 @app.route('/delete_sale/<int:id>')
 @roles_accepted('admin', 'editor')
 def delete_sale(id):
@@ -121,7 +126,7 @@ def delete_sale(id):
         return redirect('/view_sale')
     except:
         return 'delete error'
-    
+
 @app.route('/update_sale/<int:id>', methods=['GET', 'POST'])
 @roles_accepted('admin', 'editor')
 def update_sale(id):
@@ -132,7 +137,7 @@ def update_sale(id):
         sale.customer_name = request.form['customer']
         sale.user_name = request.form['user']
         prod = Product.query.filter_by(product_name=product).first()
-        if prod: 
+        if prod:
             if prod.product_quantity < int(quantity):
                 error = 'Not enough quantity'
             else:
@@ -152,6 +157,7 @@ def update_sale(id):
         return render_template('update_sale.html', sale=sale)
 
 @app.route('/download_sales')
+@roles_accepted('admin')
 def download_sales():
     format = request.args.get('format')
     sales_dict = export_sale_json()
@@ -173,16 +179,17 @@ def download_sales():
         return "Invalid format", 400
     return response
 
-@app.route('/upload', methods=['POST', 'GET'])
-def upload():
+@app.route('/upload_sales', methods=['POST', 'GET'])
+@roles_accepted('admin', 'editor')
+def upload_sales():
     if request.method == 'POST':
         if 'file' not in request.files:
             return jsonify({"error": "No file part"}), 400
-        
+
         uploaded_file = request.files['file']
         if uploaded_file == '':
             return jsonify({"error": "No selected file"}), 400
-        
+
         if uploaded_file and allowed_file(uploaded_file.filename):
             filename = secure_filename(uploaded_file.filename)
             extention = filename.rsplit('.', 1)[1].lower()
@@ -190,16 +197,17 @@ def upload():
             uploaded_file.save(file_path)
             filename.rsplit('.', 1)[1].lower()
             if extention == 'json':
-                handle_json_file(file_path)                
+                msg = parse_sales_json_file(file_path)
+                return msg
             elif extention == 'csv':
                 inspector = inspect(db.engine)
-                return parseCSV(inspector, file_path)
+                return parse_sales_csv_file(inspector, file_path)
             else:
                 pass
             return redirect('/view_sale')
         else:
             return jsonify({"error": "File not allowed"}), 400
-    return render_template('upload.html')
+    return render_template('upload_sales.html')
 
 ########## customer routes ###############
 # Define routes for customer
@@ -217,6 +225,29 @@ def search_customer():
     customers = get_customer(search)
     return render_template('search_customer.html', customers=customers)
 
+@app.route('/download_customers')
+@roles_accepted('admin')
+def download_customers():
+    format = request.args.get('format')
+    customers_dict = export_customer_json()
+
+    if format == 'csv':
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow(customers_dict[0].keys())
+        for row in customers_dict:
+            writer.writerow(row.values())
+        output.seek(0)
+        response = Response(output, mimetype='test/csv')
+        response.headers['Content-Disposition'] = 'attachment; filename=customers.csv'
+    elif format == 'json':
+        json_data = json.dumps(customers_dict, indent=4)
+        response = Response(json_data, mimetype='application/json')
+        response.headers['Content-Disposition'] = 'attachment; filename=customers.json'
+    else:
+        return jsonify("Invalid format"), 400
+    return response
+
 ########## user route ##################
 # Define routes for user
 
@@ -227,17 +258,17 @@ def load_user(user_id):
 
 @app.route('/', methods=['GET', 'POST'])
 def  login():
+  error = ""
   if request.method == 'POST':
     user_email = request.form['email']
     password = request.form['password']
     user = User.query.filter_by(user_email=user_email).first()
-
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user)
         return redirect('/view_sale')
     else:
-        return "login error"
-  return render_template('login.html')
+        error = "incorrect password"
+  return render_template('login.html', error=error)
 
 @app.route('/logout')
 @login_required
@@ -269,7 +300,7 @@ def add_user():
         user_phone = request.form['user_phone']
         password = request.form['user_password']
         user_role = request.form['privilege']
-        
+
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         role = Role.query.filter_by(name=user_role).first()
         new_user = User(user_name=user_name, user_email=user_email,
@@ -283,7 +314,7 @@ def add_user():
             return 'There was an error adding user'
     else:
         return render_template('add_user.html')
-    
+
 @app.route('/info_user/<int:id>', methods=['GET'])
 @roles_accepted('admin', 'supervisor')
 def info_user(id):
@@ -303,7 +334,7 @@ def delete_user(id):
         return redirect('/view_user')
     except:
         return 'delete error'
-    
+
 @app.route('/update_user/<int:id>', methods=['GET', 'POST'])
 @roles_accepted('admin')
 def update_user(id):
@@ -320,7 +351,7 @@ def update_user(id):
             return redirect('/view_user')
         except:
             return 'db update error'
-        
+
     else:
         return render_template('update_user.html', user=user)
 
@@ -382,7 +413,7 @@ def delete_product(id):
         return redirect('/view_product')
     except:
         return 'delete error'
-    
+
 @app.route('/update_product/<int:id>', methods=['GET', 'POST'])
 @roles_accepted('admin', 'editor')
 def update_product(id):
@@ -397,9 +428,63 @@ def update_product(id):
             return redirect('/view_product')
         except:
             return 'db update error'
-        
+
     else:
         return render_template('update_product.html', product=product)
+
+@app.route('/download_products')
+@roles_accepted('admin', 'editor')
+def download_products():
+    format = request.args.get('format')
+    products_dict = export_product_json()
+
+    if format == 'csv':
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow(products_dict[0].keys())
+        for row in products_dict:
+            writer.writerow(row.values())
+        output.seek(0)
+        response = Response(output, mimetype='test/csv')
+        response.headers['Content-Disposition'] = 'attachment; filename=products.csv'
+    elif format == 'json':
+        json_data = json.dumps(products_dict, indent=4)
+        response = Response(json_data, mimetype='application/json')
+        response.headers['Content-Disposition'] = 'attachment; filename=products.json'
+    else:
+        return "Invalid format", 400
+    return response
+
+@app.route('/upload_products', methods=['POST', 'GET'])
+@roles_accepted('admin', 'editor')
+def upload_products():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+
+        uploaded_file = request.files['file']
+        if uploaded_file == '':
+            return jsonify({"error": "No selected file"}), 400
+
+        if uploaded_file and allowed_file(uploaded_file.filename):
+            filename = secure_filename(uploaded_file.filename)
+            extention = filename.rsplit('.', 1)[1].lower()
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            uploaded_file.save(file_path)
+            filename.rsplit('.', 1)[1].lower()
+            if extention == 'json':
+                msg = parse_products_json_file(file_path)
+                return msg
+            elif extention == 'csv':
+                inspector = inspect(db.engine)
+                msg = parse_products_csv_file(inspector, file_path)
+                return msg
+            else:
+                pass
+            return redirect('/view_product')
+        else:
+            return jsonify({"error": "File not allowed"}), 400
+    return render_template('upload_products')
 
 
 if __name__ == "__main__":

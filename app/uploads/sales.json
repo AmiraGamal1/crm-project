@@ -1,12 +1,22 @@
 [
     {
-        "id": 1,
+        "id": 3,
         "product_name": "car",
         "product_quantity": 3,
-        "customer_name": "mohammed",
+        "customer_name": "ahmed",
         "customer_email": "mg@gmail.com",
-        "customer_phone": "01204190915",
+        "customer_phone": "1204190915",
         "user_name": "Amira",
-        "date": "2024-08-27T15:53:21.637497"
+        "date": "2024-09-15T13:22:39.133653"
+    },
+    {
+        "id": 4,
+        "product_name": "phone",
+        "product_quantity": 1,
+        "customer_name": "ahmed",
+        "customer_email": "advanceddatabase6@gmail.com",
+        "customer_phone": "1204190915",
+        "user_name": "Amira",
+        "date": "2024-09-15T13:22:39.133653"
     }
 ]

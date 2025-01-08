@@ -14,6 +14,9 @@
                         <input type="email" name="email" id="email" placeholder="Email" required>
                     </div>
                     <div class="input-filed">
+                        {% if error == 'incorrect password' %}
+                        <div class="error-mesg">{{ error }}</div>
+                        {% endif %}
                         <input type="password" name="password" id="password" placeholder="Password" required>
                     </div>
                         <div class="input-filed">

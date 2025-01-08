@@ -50,6 +50,20 @@
             {% endfor %}
         </table>
         {% endif %}
+</div>
+<div class="add">
+    {% if current_user.has_role('admin')%}
+    <div class="download-container">
+        <button id="downloadBtn">Download</button>
+        <div id="dropdown" class="dropdown-content">
+            <a href="#" class="download-link" data-table="customers" data-format="json">JSON</a>
+            <a href="#" class="download-link" data-table="customers" data-format="csv">CSV</a>
+        </div>
     </div>
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% endblock %}
+    {% endif %}
+</div>
 </div>
 {% endblock %}

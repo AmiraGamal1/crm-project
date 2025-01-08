@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+	"product_name": "alarm",
+        "price": 200,
+        "product_quantity": 11,
+        "date": "2024-09-15T11:47:37.775530"
+    },
+    {
+        "id": 2,
+        "product_name": "car",
+        "price": 100,
+        "product_quantity": 73,
+        "date": "2024-09-15T11:47:37.775530"
+    }
+]

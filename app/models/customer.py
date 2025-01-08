@@ -3,6 +3,7 @@ from datetime import datetime
 import pytz
 
 class Customer(db.Model):
+    __tablename__ = 'customers'
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(200), nullable=False)
     customer_email = db.Column(db.String(200), nullable=False)
